@@ -1,0 +1,50 @@
+u1 = User.objects.create_user('Kalyvan')
+#не могла разобраться с Django shell, выдавал ошибку, но пользователя в базе данных создал. При перезапуске и создании новых пользователей заработал нормально.
+
+u2 = User.objects.create_user('Шурале')
+a2 = Author.objects.create(user=u2)
+u3 = User.objects.create_user('Петрович')
+a3 = Author.objects.create(user=u3)
+
+cat1 = Category.objects.create(name='Видеоигры')
+cat2 = Category.objects.create(name='Главные события дня')
+cat3 = Category.objects.create(name='Медицина')
+cat4 = Category.objects.create(name='Политика')
+
+p1 = Post.objects.create(author=a2, title='Котоферма', post_type='AT', text='Новая расслабляющая игра о котиках на собственной ферме.')
+
+p1.category.add(cat1)
+
+p2 = Post.objects.create(author=a2, title='Вакцина', post_type='AT', text='Хорошие и полезные открытия в современной медицине помогают людям по всему миру.')
+p3 = Post.objects.create(author=a2, title='Открытие галереи', post_type='NW', text='Сегодня в городе n состоялось торжественное открытие галереи, посвященной видеоиграм.')
+
+p2.category.add(cat3)
+p3.category.add(cat1, cat2)
+
+com1 = Comment.objects.create(user=u2, post=p3, text='Обязательно схожу!')
+com2 = Comment.objects.create(user=u2, post=p1, text='Жду выхода')
+com3 = Comment.objects.create(user=u2, post=p1, text='Интнрнмно будет поиграть с другом)')
+com4 = Comment.objects.create(user=u2, post=p1, text='Жду выхода')
+
+p2 = Post.objects.get(pk=2)
+p2.like()
+p2.like()
+p2.like()
+p2.dislike()
+
+a3 = Author.objects.get(pk=2)
+a3.rating()
+
+p3 = Post.objects.get(pk=3)
+p3.like()
+p3.dislike()
+
+best_post = Post.objects.order_by('-rating').first()
+best_post.rating
+
+comments_best_post = Comment.objects.filter(post=best_post).values('comment_time', 'user__username', 'rating', 'post', 'text')
+
+
+
+
+
